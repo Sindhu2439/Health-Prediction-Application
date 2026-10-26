@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Patient - Health Prediction App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 30px 15px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000015;
+        }
+
+        h1 {
+            color: #1d4ed8;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button, .cancel {
+            display: inline-block;
+            padding: 12px 16px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel {
+            background: #64748b;
+            margin-left: 8px;
+        }
+
+        .cancel:hover {
+            background: #475569;
+        }
+
+        .note {
+            color: #64748b;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit Patient</h1>
+
+        <p class="note">
+            Update the patient details and select Update Patient to save
+            your changes.
+        </p>
+
+        <form method="POST"
+              action="{{ url_for('edit_patient', patient_id=patient['id']) }}">
+
+            <label for="full_name">Full Name</label>
+            <input
+                type="text"
+                id="full_name"
+                name="full_name"
+                maxlength="100"
+                value="{{ patient['full_name'] }}"
+                required
+            >
+
+            <label for="dob">Date of Birth (DD/MM/YYYY)</label>
+            <input
+                type="text"
+                id="dob"
+                name="dob"
+                placeholder="DD/MM/YYYY"
+                pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}"
+                title="Enter the date in DD/MM/YYYY format"
+                value="{{ patient['dob'] }}"
+                required
+            >
+
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                maxlength="254"
+                value="{{ patient['email'] }}"
+                required
+            >
+
+            <label for="glucose">Glucose</label>
+            <input
+                type="number"
+                id="glucose"
+                name="glucose"
+                step="any"
+                min="0"
+                value="{{ patient['glucose'] }}"
+                required
+            >
+
+            <label for="haemoglobin">Haemoglobin</label>
+            <input
+                type="number"
+                id="haemoglobin"
+                name="haemoglobin"
+                step="any"
+                min="0"
+                value="{{ patient['haemoglobin'] }}"
+                required
+            >
+
+            <label for="cholesterol">Cholesterol</label>
+            <input
+                type="number"
+                id="cholesterol"
+                name="cholesterol"
+                step="any"
+                min="0"
+                value="{{ patient['cholesterol'] }}"
+                required
+            >
+
+            <button type="submit">Update Patient</button>
+            <a class="cancel" href="{{ url_for('home') }}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

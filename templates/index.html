@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Prediction App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 30px 15px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000015;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #1d4ed8;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button, .button {
+            display: inline-block;
+            padding: 11px 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover, .button:hover {
+            background: #1d4ed8;
+        }
+
+        .save-button {
+            width: 100%;
+        }
+
+        .note {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .medical-disclaimer {
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            border-left: 5px solid #ea580c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .medical-disclaimer strong {
+            color: #9a3412;
+        }
+
+        .medical-disclaimer p {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .patient {
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .patient p {
+            line-height: 1.5;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #166534;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 18px;
+            }
+
+            body {
+                padding: 15px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Health Prediction App</h1>
+
+        <p class="note">
+            Enter patient details to save a record. Health information
+            is for general educational purposes and is not a diagnosis.
+        </p>
+
+        <div class="medical-disclaimer">
+            <strong>Important Medical Disclaimer</strong>
+            <p>
+                AI remarks explain the measurements but do not determine
+                whether values are medically normal. This app does not
+                provide a medical diagnosis. Please consult a qualified
+                healthcare professional to interpret your results using
+                the correct units and reference ranges.
+            </p>
+        </div>
+
+        <form id="patientForm" action="/add" method="POST">
+            <label for="full_name">Full Name</label>
+            <input
+                type="text"
+                id="full_name"
+                name="full_name"
+                maxlength="100"
+                required
+            >
+
+            <label for="dob">Date of Birth (DD/MM/YYYY)</label>
+            <input
+                type="text"
+                id="dob"
+                name="dob"
+                placeholder="DD/MM/YYYY"
+                pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}"
+                title="Enter the date in DD/MM/YYYY format"
+                required
+            >
+
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                maxlength="254"
+                required
+            >
+
+            <label for="glucose">Glucose</label>
+            <input
+                type="number"
+                id="glucose"
+                name="glucose"
+                step="any"
+                min="0"
+                required
+            >
+
+            <label for="haemoglobin">Haemoglobin</label>
+            <input
+                type="number"
+                id="haemoglobin"
+                name="haemoglobin"
+                step="any"
+                min="0"
+                required
+            >
+
+            <label for="cholesterol">Cholesterol</label>
+            <input
+                type="number"
+                id="cholesterol"
+                name="cholesterol"
+                step="any"
+                min="0"
+                required
+            >
+
+            <button type="submit" class="save-button">
+                Save Patient
+            </button>
+        </form>
+
+        <p class="note">
+            Please enter the correct units for each measurement as specified
+            by your test report. The app will not independently confirm a
+            medical diagnosis.
+        </p>
+
+        <hr>
+
+        <h2>Patient Records</h2>
+
+        {% if patients %}
+            {% for patient in patients %}
+                <div class="patient">
+                    <p>
+                        <strong>ID:</strong>
+                        {{ patient['id'] }}
+                    </p>
+
+                    <p>
+                        <strong>Name:</strong>
+                        {{ patient['full_name'] }}
+                    </p>
+
+                    <p>
+                        <strong>Date of Birth:</strong>
+                        {{ patient['dob'] }}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ patient['email'] }}
+                    </p>
+
+                    <p>
+                        <strong>Glucose:</strong>
+                        {{ patient['glucose'] }}
+                    </p>
+
+                    <p>
+                        <strong>Haemoglobin:</strong>
+                        {{ patient['haemoglobin'] }}
+                    </p>
+
+                    <p>
+                        <strong>Cholesterol:</strong>
+                        {{ patient['cholesterol'] }}
+                    </p>
+
+                    <p>
+                        <strong>AI Remarks:</strong>
+                        {{ patient['remarks'] or 'Not generated yet' }}
+                    </p>
+
+                    <a
+                        class="button"
+                        href="{{ url_for('edit_patient', patient_id=patient['id']) }}"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        action="{{ url_for('delete_patient', patient_id=patient['id']) }}"
+                        method="POST"
+                        onsubmit="return confirm('Delete this patient record?');"
+                        style="display: inline;"
+                    >
+                        <button type="submit" class="delete-button">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty">
+                No patient records have been saved yet.
+            </p>
+        {% endif %}
+    </div>
+</body>
+</html>
